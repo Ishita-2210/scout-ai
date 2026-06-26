@@ -3,14 +3,23 @@ from pydantic import BaseModel, Field
 
 class ChatRequest(BaseModel):
     """
-    Incoming chat request.
+    Incoming request from the client.
     """
 
-    user_id: str = Field(...)
+    user_id: str = Field(
+        ...,
+        description="Unique user identifier",
+    )
 
-    session_id: str = Field(...)
+    session_id: str = Field(
+        ...,
+        description="Conversation session identifier",
+    )
 
-    message: str = Field(...)
+    message: str = Field(
+        ...,
+        description="User message",
+    )
 
 
 class ChatResponse(BaseModel):
@@ -18,7 +27,10 @@ class ChatResponse(BaseModel):
     Response returned by Scout.
     """
 
-    response: str
+    message: str = Field(
+        ...,
+        description="Assistant response",
+    )
 
     user_id: str
 
