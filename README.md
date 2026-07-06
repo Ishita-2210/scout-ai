@@ -52,7 +52,7 @@ Scout unifies these services into a single AI assistant capable of understanding
                       ▼
                Root Orchestrator
                       │
- ┌──────────┬──────────┬──────────┬──────────┬──────────┬──────────┐
+ ┌──────────┬──────────┬──────────┬──────────┬──────────┬
  │          │          │          │          │          │
  ▼          ▼          ▼          ▼          ▼          ▼
 School   Scholarship Housing  Documents  Legal  Counselling
