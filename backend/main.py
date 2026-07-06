@@ -1,82 +1,135 @@
 """
-Scout FastAPI Application.
+Scout Backend.
 
 Application entry point.
 """
 
+from __future__ import annotations
+from fastapi.middleware.cors import CORSMiddleware
+import logging
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 
-from backend.api.routes import router
+from backend.database import create_tables
+
+from backend.agents.register import register_agents
+
+from backend.api.chat import router as chat_router
+
+logger = logging.getLogger(__name__)
 
 
-# ---------------------------------------------------------
+# ==========================================================
 # Application Lifespan
-# ---------------------------------------------------------
+# ==========================================================
+
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(
+    app: FastAPI,
+):
     """
-    Startup and shutdown events.
+    Application startup and shutdown.
     """
 
-    print("Starting Scout AI Backend...")
+    logger.info(
+        "Starting Scout backend...",
+    )
+
+    create_tables()
+
+    register_agents()
+
+    logger.info(
+        "Scout backend started successfully.",
+    )
 
     yield
 
-    print("Shutting down Scout AI Backend...")
+    logger.info(
+        "Shutting down Scout backend.",
+    )
 
-
-# ---------------------------------------------------------
+# ==========================================================
 # FastAPI Application
-# ---------------------------------------------------------
+# ==========================================================
 
 app = FastAPI(
-    title="Scout AI",
+    title="Scout API",
     description=(
-        "Multi-Agent AI system that helps disaster-displaced "
-        "students reconnect with education."
+        "AI-powered disaster education assistance "
+        "platform."
     ),
     version="1.0.0",
     lifespan=lifespan,
 )
-
-
-# ---------------------------------------------------------
-# CORS
-# ---------------------------------------------------------
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],          # tighten this later for production
+    allow_origins=[
+        "http://localhost:5173",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-# ---------------------------------------------------------
+app.include_router(
+    chat_router,
+    prefix="/api",
+    tags=["Chat"],
+)
+# ==========================================================
 # Routers
-# ---------------------------------------------------------
+# ==========================================================
 
-app.include_router(router)
+# Example:
+#
+# from backend.api.chat import router as chat_router
+#
+# app.include_router(
+#     chat_router,
+#     prefix="/api",
+#     tags=["Chat"],
+# )
+#
+# Uncomment after the chat router is implemented.
 
 
-# ---------------------------------------------------------
+# ==========================================================
+# Health Check
+# ==========================================================
+
+@app.get(
+    "/health",
+    tags=["Health"],
+)
+async def health() -> dict[str, str]:
+    """
+    Health check endpoint.
+    """
+
+    return {
+        "status": "healthy",
+        "service": "Scout Backend",
+    }
+
+
+# ==========================================================
 # Root Endpoint
-# ---------------------------------------------------------
+# ==========================================================
 
-@app.get("/")
-async def root():
+@app.get(
+    "/",
+    tags=["Root"],
+)
+async def root() -> dict[str, str]:
     """
     Root endpoint.
     """
 
     return {
-        "application": "Scout AI",
-        "version": "1.0.0",
-        "status": "running",
-        "docs": "/docs",
+        "message": (
+            "Welcome to the Scout API."
+        ),
     }

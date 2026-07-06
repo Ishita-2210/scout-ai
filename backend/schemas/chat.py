@@ -1,37 +1,50 @@
-from pydantic import BaseModel, Field
+"""
+Scout Chat Schemas.
+"""
+
+from pydantic import Field
+
+from backend.models.common import DomainModel
 
 
-class ChatRequest(BaseModel):
+class ChatRequest(DomainModel):
     """
-    Incoming request from the client.
+    Incoming chat request.
     """
 
     user_id: str = Field(
-        ...,
-        description="Unique user identifier",
+        description="Unique user identifier.",
     )
 
     session_id: str = Field(
-        ...,
-        description="Conversation session identifier",
+        description="Conversation session identifier.",
     )
 
     message: str = Field(
-        ...,
-        description="User message",
+        min_length=1,
+        description="User message.",
     )
 
 
-class ChatResponse(BaseModel):
+class ChatResponse(DomainModel):
     """
-    Response returned by Scout.
+    Chat response.
     """
 
     message: str = Field(
-        ...,
-        description="Assistant response",
+        description="Assistant response.",
     )
 
-    user_id: str
+    user_id: str = Field(
+        description="User identifier.",
+    )
 
-    session_id: str
+    session_id: str = Field(
+        description="Conversation session identifier.",
+    )
+
+
+__all__ = (
+    "ChatRequest",
+    "ChatResponse",
+)
