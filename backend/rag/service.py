@@ -15,18 +15,15 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from backend.rag.loader import (
-    document_loader,
-)
-
-from backend.rag.chunker import (
-    semantic_chunker,
-)
-
 from backend.rag.chroma_store import (
     chroma_store,
 )
-
+from backend.rag.chunker import (
+    semantic_chunker,
+)
+from backend.rag.loader import (
+    document_loader,
+)
 from backend.rag.retriever import (
     semantic_retriever,
 )
@@ -168,9 +165,7 @@ class RAGService:
         Clear the complete knowledge base.
         """
 
-        logger.warning(
-            "Resetting Scout knowledge base."
-        )
+        logger.warning("Resetting Scout knowledge base.")
 
         chroma_store.reset()
 

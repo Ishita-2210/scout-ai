@@ -4,7 +4,6 @@ Constants for the Scout School Agent.
 
 from typing import Final
 
-
 # ==========================================================
 # Agent Identity
 # ==========================================================

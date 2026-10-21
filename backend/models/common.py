@@ -21,6 +21,4 @@ class DomainModel(BaseModel):
     )
 
 
-__all__ = (
-    "DomainModel",
-)
+__all__ = ("DomainModel",)

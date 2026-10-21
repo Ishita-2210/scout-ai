@@ -14,12 +14,12 @@ from typing import Final
 import chromadb
 from chromadb.api.models.Collection import Collection
 
+from backend.rag.embeddings import (
+    embedding_provider,
+)
 from backend.rag.models import (
     DocumentChunk,
     RetrievedChunk,
-)
-from backend.rag.embeddings import (
-    embedding_provider,
 )
 
 logger = logging.getLogger(__name__)
@@ -28,11 +28,7 @@ logger = logging.getLogger(__name__)
 # Configuration
 # ==========================================================
 
-DATABASE_PATH: Final = (
-    Path("backend")
-    / "data"
-    / "chroma"
-)
+DATABASE_PATH: Final = Path("backend") / "data" / "chroma"
 
 COLLECTION_NAME: Final = "scout_knowledge"
 
@@ -63,15 +59,11 @@ class ChromaStore:
             path=str(database_path),
         )
 
-        self.collection: Collection = (
-            self.client.get_or_create_collection(
-                name=collection_name,
-                metadata={
-                    "description": (
-                        "Scout RAG Knowledge Base"
-                    ),
-                },
-            )
+        self.collection: Collection = self.client.get_or_create_collection(
+            name=collection_name,
+            metadata={
+                "description": ("Scout RAG Knowledge Base"),
+            },
         )
 
         logger.info(
@@ -92,7 +84,6 @@ class ChromaStore:
         """
 
         if not chunks:
-
             return 0
 
         ids: list[str] = []
@@ -101,7 +92,6 @@ class ChromaStore:
         metadatas: list[dict] = []
 
         for chunk in chunks:
-
             ids.append(
                 chunk.id,
             )
@@ -125,7 +115,6 @@ class ChromaStore:
                 chunk,
                 "metadata",
             ):
-
                 metadata.update(
                     chunk.metadata,
                 )
@@ -186,7 +175,6 @@ class ChromaStore:
         distances = results.get("distances", [[]])[0]
 
         for idx in range(len(ids)):
-
             metadata = metas[idx] or {}
 
             chunk = DocumentChunk(
@@ -200,15 +188,6 @@ class ChromaStore:
                     "chunk_index",
                     0,
                 ),
-                metadata={
-                    k: v
-                    for k, v in metadata.items()
-                    if k
-                    not in {
-                        "document_id",
-                        "chunk_index",
-                    }
-                },
             )
 
             distance = distances[idx]
@@ -222,7 +201,8 @@ class ChromaStore:
                 RetrievedChunk(
                     chunk=chunk,
                     score=score,
-                    document=docs[idx],
+                    content=docs[idx],
+                    metadata={k: str(v) for k, v in metadata.items()},
                 )
             )
 
@@ -280,10 +260,8 @@ class ChromaStore:
             COLLECTION_NAME,
         )
 
-        self.collection = (
-            self.client.get_or_create_collection(
-                name=COLLECTION_NAME,
-            )
+        self.collection = self.client.get_or_create_collection(
+            name=COLLECTION_NAME,
         )
 
         logger.warning(

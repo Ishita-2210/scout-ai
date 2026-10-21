@@ -13,7 +13,6 @@ from pydantic import Field
 
 from backend.models.common import DomainModel
 
-
 # ==========================================================
 # Source Document
 # ==========================================================
@@ -81,7 +80,6 @@ class RetrievedChunk(DomainModel):
     """
 
     chunk: DocumentChunk
-    score: float
     content: str
     metadata: dict[str, str] = Field(
         default_factory=dict,

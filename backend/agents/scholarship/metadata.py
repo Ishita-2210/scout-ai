@@ -19,10 +19,7 @@ class AgentMetadata:
 
 METADATA: Final = AgentMetadata(
     name="scholarship_agent",
-    description=(
-        "Helps students discover scholarships, "
-        "financial aid, grants, and educational funding."
-    ),
+    description=("Helps students discover scholarships, financial aid, grants, and educational funding."),
     responsibilities=(
         "scholarships",
         "financial aid",

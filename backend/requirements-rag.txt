@@ -1,0 +1,6 @@
+# Optional, pre-existing semantic Chroma indexing utilities only.
+# The running chat application uses local PDF retrieval and needs no Google key.
+-r requirements.txt
+chromadb>=1.5,<2
+google-genai==2.10.0
+PyMuPDF>=1.26,<2

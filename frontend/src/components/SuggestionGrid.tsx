@@ -1,86 +1,86 @@
 import {
-  GraduationCap,
-  School,
+  ArrowUpRight,
+  BookOpen,
   FileText,
-  Home,
-  Scale,
+  GraduationCap,
   HeartHandshake,
+  House,
+  Scale,
 } from "lucide-react";
-
-type Props = {
-  onSelect: (text: string) => void;
-};
-
 const suggestions = [
   {
-    title: "Find Nearby Schools",
-    description: "Search government and private schools nearby.",
-    icon: School,
-    prompt: "Find government schools near me",
+    title: "Get back to school",
+    description: "Find a school. Understand admissions.",
+    icon: BookOpen,
+    category: "01 / EDUCATION",
+    prompt:
+      "I have been displaced and need help finding a school. Where should I start?",
   },
   {
-    title: "Scholarships",
-    description: "Explore scholarships you are eligible for.",
+    title: "Make learning affordable",
+    description: "Explore scholarships and financial support.",
     icon: GraduationCap,
-    prompt: "Find scholarships I am eligible for",
+    category: "02 / FUNDING",
+    prompt: "Can you help me find scholarships I may be eligible for?",
   },
   {
-    title: "Lost Documents",
-    description: "Recover TC, marksheets and certificates.",
+    title: "Replace lost documents",
+    description: "Find a way forward with missing records.",
     icon: FileText,
-    prompt: "I lost my admission documents",
+    category: "03 / DOCUMENTS",
+    prompt:
+      "I lost my transfer certificate and marksheets. How can I replace them?",
   },
   {
-    title: "Housing",
-    description: "Locate temporary accommodation and shelters.",
-    icon: Home,
-    prompt: "Help me find temporary housing",
+    title: "Find a place to stay",
+    description: "Look for temporary housing near schools.",
+    icon: House,
+    category: "04 / HOUSING",
+    prompt: "I need temporary housing near a school after displacement.",
   },
   {
-    title: "Legal Help",
-    description: "Know your educational rights.",
+    title: "Understand your rights",
+    description: "Get guidance on education rights and policies.",
     icon: Scale,
-    prompt: "I need legal assistance",
+    category: "05 / RIGHTS",
+    prompt: "What are my school admission rights if I have lost my documents?",
   },
   {
-    title: "Counselling",
-    description: "Receive emotional support resources.",
+    title: "Feel ready to learn again",
+    description: "Take a breath. Build a manageable study plan.",
     icon: HeartHandshake,
-    prompt: "I need emotional counselling",
+    category: "06 / WELLBEING",
+    prompt:
+      "I feel overwhelmed after displacement and need help getting back to studying.",
   },
 ];
-
 export default function SuggestionGrid({
   onSelect,
-}: Props) {
+  disabled,
+}: {
+  onSelect: (text: string) => void;
+  disabled: boolean;
+}) {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {suggestions.map((item) => {
-        const Icon = item.icon;
-
-        return (
+    <section className="suggestion-grid" aria-label="Ways Scout can help">
+      {suggestions.map(
+        ({ title, description, icon: Icon, category, prompt }) => (
           <button
-            key={item.title}
-            onClick={() => onSelect(item.prompt)}
-            className="rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm transition duration-200 hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl"
+            key={title}
+            className="suggestion"
+            disabled={disabled}
+            onClick={() => onSelect(prompt)}
           >
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100">
-              <Icon
-                size={24}
-                className="text-blue-600"
-              />
+            <div className="suggestion-top">
+              <Icon size={23} strokeWidth={1.6} />
+              <span>{category}</span>
+              <ArrowUpRight size={17} />
             </div>
-
-            <h3 className="text-lg font-semibold text-slate-800">
-              {item.title}
-            </h3>
-
-            <p className="mt-2 text-sm leading-6 text-slate-500">
-              {item.description}
-            </p>
+            <h2>{title}</h2>
+            <p>{description}</p>
           </button>
-        );
-      })}
-    </div>
+        ),
+      )}
+    </section>
   );
 }

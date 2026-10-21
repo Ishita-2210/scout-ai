@@ -53,21 +53,12 @@ class DocumentLoader:
         """
 
         if not directory.exists():
-
-            raise FileNotFoundError(
-                f"Directory not found: {directory}"
-            )
+            raise FileNotFoundError(f"Directory not found: {directory}")
 
         documents: list[SourceDocument] = []
 
         for file in sorted(directory.rglob("*")):
-
-            if (
-                file.is_file()
-                and file.suffix.lower()
-                in self.SUPPORTED_EXTENSIONS
-            ):
-
+            if file.is_file() and file.suffix.lower() in self.SUPPORTED_EXTENSIONS:
                 documents.append(
                     self.load_document(
                         file,
@@ -96,14 +87,11 @@ class DocumentLoader:
         suffix = path.suffix.lower()
 
         if suffix == ".pdf":
-
             return self._load_pdf(
                 path,
             )
 
-        raise ValueError(
-            f"Unsupported document type: {suffix}"
-        )
+        raise ValueError(f"Unsupported document type: {suffix}")
 
     # ------------------------------------------------------
     # PDF
@@ -122,21 +110,17 @@ class DocumentLoader:
         pages: list[str] = []
 
         try:
-
             for page in document:
-
                 text = page.get_text(
                     "text",
                 )
 
                 if text:
-
                     pages.append(
                         text.strip(),
                     )
 
         finally:
-
             document.close()
 
         return SourceDocument(

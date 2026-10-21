@@ -9,40 +9,32 @@ from __future__ import annotations
 
 import logging
 
-from backend.agents.registry import (
-    registry,
+from backend.agents.counselling.agent import (
+    create_counselling_agent,
 )
-
-from backend.agents.root.agent import (
-    create_root_agent,
-)
-
-from backend.agents.root.constants import (
-    AGENT_NAME as ROOT_AGENT_NAME,
-)
-
-from backend.agents.school.agent import (
-    create_school_agent,
-)
-
-from backend.agents.scholarship.agent import (
-    create_scholarship_agent,
-)
-
 from backend.agents.document.agent import (
     create_document_agent,
 )
-
 from backend.agents.housing.agent import (
     create_housing_agent,
 )
-
 from backend.agents.legal.agent import (
     create_legal_agent,
 )
-
-from backend.agents.counselling.agent import (
-    create_counselling_agent,
+from backend.agents.registry import (
+    registry,
+)
+from backend.agents.root.agent import (
+    create_root_agent,
+)
+from backend.agents.root.constants import (
+    AGENT_NAME as ROOT_AGENT_NAME,
+)
+from backend.agents.scholarship.agent import (
+    create_scholarship_agent,
+)
+from backend.agents.school.agent import (
+    create_school_agent,
 )
 
 logger = logging.getLogger(__name__)
@@ -60,7 +52,6 @@ def register_agents() -> None:
     """
 
     if ROOT_AGENT_NAME in registry:
-
         logger.info(
             "Agents already registered.",
         )
@@ -99,12 +90,7 @@ def register_agents() -> None:
     # ------------------------------------------------------
     # Register Specialists
     # ------------------------------------------------------
-    print("\n=== Agents to register ===")
     for agent in specialists:
-        print(agent.name)
-        print("==========================\n")
-    for agent in specialists:
-
         registry.register(
             agent.name,
             agent,
@@ -129,6 +115,4 @@ def register_agents() -> None:
     )
 
 
-__all__ = (
-    "register_agents",
-)
+__all__ = ("register_agents",)

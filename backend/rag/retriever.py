@@ -12,7 +12,6 @@ import logging
 from backend.rag.chroma_store import (
     chroma_store,
 )
-
 from backend.rag.models import (
     RetrievedChunk,
 )
@@ -64,6 +63,7 @@ class SemanticRetriever:
         )
 
         return results
+
     # ------------------------------------------------------
     # Context Building
     # ------------------------------------------------------
@@ -85,7 +85,6 @@ class SemanticRetriever:
         )
 
         if not retrieved:
-
             logger.info(
                 "No retrieval results found.",
             )
@@ -97,7 +96,6 @@ class SemanticRetriever:
         seen: set[str] = set()
 
         for result in retrieved:
-
             if result.score < minimum_score:
                 continue
 

@@ -4,7 +4,6 @@ Constants for the Scout Counselling Agent.
 
 from typing import Final
 
-
 # ==========================================================
 # Agent Identity
 # ==========================================================

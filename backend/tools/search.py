@@ -19,6 +19,4 @@ async def search_web(
     return response.model_dump()
 
 
-__all__ = (
-    "search_web",
-)
+__all__ = ("search_web",)

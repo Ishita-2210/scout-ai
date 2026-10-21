@@ -5,9 +5,7 @@ Defines the specialist agent responsible for helping
 students with admission documents.
 """
 
-from google.adk.agents import Agent
-
-from backend.agents.agent_builder import build_agent
+from backend.agents.agent_builder import Agent, build_agent
 from backend.agents.document.constants import (
     AGENT_NAME,
     DESCRIPTION,
@@ -35,6 +33,4 @@ def create_document_agent() -> Agent:
     )
 
 
-__all__ = (
-    "create_document_agent",
-)
+__all__ = ("create_document_agent",)

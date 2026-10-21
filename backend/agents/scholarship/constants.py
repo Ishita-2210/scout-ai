@@ -4,7 +4,6 @@ Scout Scholarship Agent Constants.
 
 from typing import Final
 
-
 AGENT_NAME: Final = "scholarship_agent"
 
 PROMPT_FOLDER: Final = "scholarship"

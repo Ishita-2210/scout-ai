@@ -12,11 +12,9 @@ from typing import Protocol
 
 from google import genai
 
-from backend.config import GOOGLE_API_KEY
+from backend.config import EMBEDDING_MODEL, GOOGLE_API_KEY
 
 logger = logging.getLogger(__name__)
-
-EMBEDDING_MODEL = "gemini-embedding-001"
 
 
 # ==========================================================
@@ -32,14 +30,12 @@ class EmbeddingProvider(Protocol):
     def embed(
         self,
         text: str,
-    ) -> list[float]:
-        ...
+    ) -> list[float]: ...
 
     def embed_batch(
         self,
         texts: list[str],
-    ) -> list[list[float]]:
-        ...
+    ) -> list[list[float]]: ...
 
 
 # ==========================================================
@@ -54,9 +50,15 @@ class GoogleEmbeddingProvider:
 
     def __init__(self) -> None:
 
-        self.client = genai.Client(
-            api_key=GOOGLE_API_KEY,
-        )
+        self._client = None
+
+    @property
+    def client(self):
+        if self._client is None:
+            if not GOOGLE_API_KEY:
+                raise RuntimeError("Optional semantic indexing requires GOOGLE_API_KEY.")
+            self._client = genai.Client(api_key=GOOGLE_API_KEY)
+        return self._client
 
     # ------------------------------------------------------
     # Single Embedding
@@ -92,7 +94,6 @@ class GoogleEmbeddingProvider:
         embeddings: list[list[float]] = []
 
         for text in texts:
-
             embeddings.append(
                 self.embed(
                     text,

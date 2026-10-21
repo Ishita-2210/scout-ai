@@ -1,137 +1,36 @@
-"""
-Scout Search Service.
-
-Provides web search functionality for Scout using
-the Serper Search API.
-"""
-
-from typing import Final
-import logging
+"""Server-side Serper search. Queries and credentials never appear in logs."""
 
 import httpx
 
-from backend.config import (
-    SEARCH_TIMEOUT,
-    SERPER_API_KEY,
-    SERPER_URL,
-)
-from backend.models import (
-    SearchResponse,
-    SearchResult,
-)
-
-logger = logging.getLogger(__name__)
-
-MAX_RESULTS: Final = 5
+from backend import config
+from backend.models.search import SearchResponse, SearchResult
 
 
 class SearchService:
-    """
-    Service responsible for performing web searches.
-    """
-
-    async def search(
-        self,
-        query: str,
-    ) -> SearchResponse:
-        """
-        Perform a web search.
-
-        Parameters
-        ----------
-        query:
-            Search query.
-
-        Returns
-        -------
-        SearchResponse
-            Normalized search results.
-        """
-
-        logger.info(
-            "Searching for '%s'.",
-            query,
-        )
-
-        headers = {
-            "X-API-KEY": SERPER_API_KEY,
-            "Content-Type": "application/json",
-        }
-
-        payload = {
-            "q": query,
-        }
-
+    async def search(self, query: str) -> SearchResponse:
+        if not config.SERPER_API_KEY:
+            raise RuntimeError("Live search is not configured.")
         try:
-
-            async with httpx.AsyncClient(
-                timeout=SEARCH_TIMEOUT,
-            ) as client:
-
+            async with httpx.AsyncClient(timeout=config.SEARCH_TIMEOUT) as client:
                 response = await client.post(
-                    SERPER_URL,
-                    headers=headers,
-                    json=payload,
+                    config.SERPER_URL,
+                    headers={"X-API-KEY": config.SERPER_API_KEY},
+                    json={"q": query[:300], "num": 5},
                 )
-
                 response.raise_for_status()
-
-        except httpx.TimeoutException as exc:
-
-            logger.exception(
-                "Search request timed out."
-            )
-
-            raise RuntimeError(
-                "Search request timed out."
-            ) from exc
-
-        except httpx.HTTPStatusError as exc:
-
-            logger.exception(
-                "Search request failed."
-            )
-
-            raise RuntimeError(
-                f"Search failed ({exc.response.status_code})."
-            ) from exc
-
-        except Exception as exc:
-
-            logger.exception(
-                "Unexpected search error."
-            )
-
-            raise RuntimeError(
-                "Unexpected search failure."
-            ) from exc
-
-        data = response.json()
-
-        results = [
-            SearchResult(
-                title=result.get("title", ""),
-                url=result.get("link", ""),
-                snippet=result.get("snippet", ""),
-            )
-            for result in data.get("organic", [])[:MAX_RESULTS]
-        ]
-        
-        logger.info(
-            "Retrieved %d search results.",
-            len(results),
-        )
-
-        return SearchResponse(
-            query=query,
-            results=results,
-        )
+                data = response.json()
+                results = [
+                    SearchResult(
+                        title=str(r.get("title", ""))[:300],
+                        url=str(r.get("link", ""))[:2000],
+                        snippet=str(r.get("snippet", ""))[:1000],
+                    )
+                    for r in data.get("organic", [])[:5]
+                    if isinstance(r, dict)
+                ]
+                return SearchResponse(query=query, results=results)
+        except (httpx.HTTPError, ValueError, TypeError, AttributeError) as exc:
+            raise RuntimeError("Live search is unavailable.") from exc
 
 
 search_service = SearchService()
-
-
-__all__ = (
-    "SearchService",
-    "search_service",
-)

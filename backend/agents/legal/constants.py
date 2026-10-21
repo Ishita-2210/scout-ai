@@ -4,7 +4,6 @@ Constants for the Scout Legal Agent.
 
 from typing import Final
 
-
 # ==========================================================
 # Agent Identity
 # ==========================================================

@@ -5,9 +5,7 @@ Defines the specialist agent responsible for helping
 students find temporary accommodation and safe housing.
 """
 
-from google.adk.agents import Agent
-
-from backend.agents.agent_builder import build_agent
+from backend.agents.agent_builder import Agent, build_agent
 from backend.agents.housing.constants import (
     AGENT_NAME,
     DESCRIPTION,
@@ -18,10 +16,10 @@ from backend.models import (
 )
 from backend.tools import search_web
 
-
 # ==========================================================
 # Housing Agent Factory
 # ==========================================================
+
 
 def create_housing_agent() -> Agent:
     """
@@ -39,6 +37,4 @@ def create_housing_agent() -> Agent:
     )
 
 
-__all__ = (
-    "create_housing_agent",
-)
+__all__ = ("create_housing_agent",)

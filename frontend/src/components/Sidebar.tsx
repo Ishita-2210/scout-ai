@@ -1,170 +1,215 @@
 import {
-  Plus,
-  MessageSquare,
-  School,
-  GraduationCap,
+  ArrowUpRight,
+  BookOpen,
+  Compass,
   FileText,
-  Home,
-  Scale,
+  GraduationCap,
   HeartHandshake,
+  House,
+  MessageSquare,
+  Plus,
+  Scale,
+  Trash2,
+  X,
 } from "lucide-react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
+import type { Conversation } from "../types/Chat";
+import logo from "../scout-logo.png";
 
-const quickActions = [
+const topics = [
   {
-    icon: School,
-    label: "Schools",
+    label: "Schools & admissions",
+    icon: BookOpen,
+    prompt: "I need help finding a school and continuing my education.",
   },
   {
+    label: "Scholarships & funding",
     icon: GraduationCap,
-    label: "Scholarships",
+    prompt: "Help me find scholarships and financial support for school.",
   },
   {
+    label: "Documents & certificates",
     icon: FileText,
-    label: "Documents",
+    prompt: "I lost my school documents. How can I replace them?",
   },
   {
-    icon: Home,
-    label: "Housing",
+    label: "Housing & shelter",
+    icon: House,
+    prompt:
+      "My family has been displaced. We need temporary housing near a school.",
   },
   {
+    label: "Education rights",
     icon: Scale,
-    label: "Legal Help",
+    prompt: "Help me understand my school admission rights after displacement.",
   },
   {
+    label: "Learning & wellbeing",
     icon: HeartHandshake,
-    label: "Counselling",
+    prompt:
+      "I am struggling to return to studying after displacement. Can you help?",
   },
 ];
-
-export default function Sidebar() {
+function subscribe(listener: () => void) {
+  const media = window.matchMedia("(max-width: 680px)");
+  media.addEventListener("change", listener);
+  return () => media.removeEventListener("change", listener);
+}
+const mobileSnapshot = () => window.matchMedia("(max-width: 680px)").matches;
+export default function Sidebar({
+  conversations,
+  current,
+  open,
+  busy,
+  onClose,
+  onNew,
+  onSelect,
+  onDelete,
+  onTopic,
+  onHelp,
+}: {
+  conversations: Conversation[];
+  current: string;
+  open: boolean;
+  busy: boolean;
+  onClose: () => void;
+  onNew: () => void;
+  onSelect: (id: string) => void;
+  onDelete: (id: string) => void;
+  onTopic: (prompt: string) => void;
+  onHelp: () => void;
+}) {
+  const mobile = useSyncExternalStore(subscribe, mobileSnapshot);
+  const sidebar = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!open || !mobile) return;
+    const previous = document.activeElement as HTMLElement | null;
+    sidebar.current?.querySelector<HTMLButtonElement>(".close-nav")?.focus();
+    return () => previous?.focus();
+  }, [open, mobile]);
   return (
-    <aside className="w-72 bg-slate-900 text-white flex flex-col">
-
-      {/* Top */}
-
-      <div className="p-6">
-
+    <>
+      {open && (
         <button
-          className="
-            w-full
-            flex
-            items-center
-            justify-center
-            gap-3
-            rounded-xl
-            bg-blue-600
-            py-3
-            font-medium
-            shadow-lg
-            transition
-            hover:bg-blue-700
-          "
-        >
-          <Plus size={18} />
-          New Chat
-        </button>
-
-      </div>
-
-      {/* Recent Chats */}
-
-      <div className="px-6">
-
-        <p className="mb-3 text-xs uppercase tracking-widest text-slate-400">
-          Recent Chats
-        </p>
-
-        <div className="space-y-2">
-
-          <button className="flex w-full items-center gap-3 rounded-lg px-3 py-3 hover:bg-slate-800 transition">
-            <MessageSquare size={18} />
-            Lost Transfer Certificate
-          </button>
-
-          <button className="flex w-full items-center gap-3 rounded-lg px-3 py-3 hover:bg-slate-800 transition">
-            <MessageSquare size={18} />
-            Scholarship Eligibility
-          </button>
-
-          <button className="flex w-full items-center gap-3 rounded-lg px-3 py-3 hover:bg-slate-800 transition">
-            <MessageSquare size={18} />
-            Nearby Schools
-          </button>
-
-        </div>
-
-      </div>
-
-      {/* Quick Actions */}
-
-      <div className="mt-8 px-6">
-
-        <p className="mb-3 text-xs uppercase tracking-widest text-slate-400">
-          Quick Access
-        </p>
-
-        <div className="space-y-2">
-
-          {quickActions.map((item) => {
-
-            const Icon = item.icon;
-
-            return (
-
-              <button
-                key={item.label}
-                className="
-                  flex
-                  w-full
-                  items-center
-                  gap-3
-                  rounded-lg
-                  px-3
-                  py-3
-                  transition
-                  hover:bg-slate-800
-                "
-              >
-                <Icon size={18} />
-
-                {item.label}
-
-              </button>
-
-            );
-
-          })}
-
-        </div>
-
-      </div>
-
-      {/* Bottom */}
-
-      <div className="mt-auto border-t border-slate-700 p-6">
-
-        <div className="flex items-center gap-3">
-
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-blue-600 text-lg font-semibold">
-            I
-          </div>
-
+          className="sidebar-scrim"
+          aria-label="Close navigation"
+          onClick={onClose}
+        />
+      )}
+      <aside
+        ref={sidebar}
+        className={`sidebar ${open ? "is-open" : ""}`}
+        inert={mobile && !open}
+        role={mobile ? "dialog" : undefined}
+        aria-modal={mobile && open ? true : undefined}
+        aria-label="Main navigation"
+        onKeyDown={(event) => {
+          if (!mobile || !open) return;
+          if (event.key === "Escape") {
+            onClose();
+            return;
+          }
+          if (event.key === "Tab") {
+            const buttons = [
+              ...(sidebar.current?.querySelectorAll<HTMLButtonElement>(
+                "button:not(:disabled)",
+              ) || []),
+            ];
+            const first = buttons[0],
+              last = buttons.at(-1);
+            if (event.shiftKey && document.activeElement === first) {
+              event.preventDefault();
+              last?.focus();
+            }
+            if (!event.shiftKey && document.activeElement === last) {
+              event.preventDefault();
+              first?.focus();
+            }
+          }
+        }}
+      >
+        <div className="brand">
+          <img src={logo} alt="" />
           <div>
-
-            <p className="font-medium">
-              Ishita
-            </p>
-
-            <p className="text-sm text-slate-400">
-              Student
-            </p>
-
+            scout<span>EDUCATION, CONTINUED.</span>
           </div>
-
+          <button
+            className="icon-button close-nav"
+            aria-label="Close navigation"
+            onClick={onClose}
+          >
+            <X size={20} />
+          </button>
         </div>
-
-      </div>
-
-    </aside>
+        <button className="new-chat" disabled={busy} onClick={onNew}>
+          <Plus size={18} /> New conversation <ArrowUpRight size={15} />
+        </button>
+        <nav aria-label="Support topics">
+          <p className="nav-label">YOUR NEXT STEP</p>
+          {topics.map(({ label, icon: Icon, prompt }) => (
+            <button
+              className="topic-link"
+              key={label}
+              disabled={busy}
+              onClick={() => onTopic(prompt)}
+            >
+              <Icon size={18} />
+              {label}
+            </button>
+          ))}
+        </nav>
+        <div className="recent">
+          <p className="nav-label">
+            CONVERSATIONS <span>{conversations.length}</span>
+          </p>
+          {conversations.length === 0 ? (
+            <p className="recent-empty">
+              A place for your questions.
+              <br />
+              Your conversations will appear here.
+            </p>
+          ) : (
+            <div className="recent-list">
+              {conversations.map((chat) => (
+                <div
+                  className={`recent-item ${current === chat.id ? "selected" : ""}`}
+                  key={chat.id}
+                >
+                  <button
+                    disabled={busy}
+                    onClick={() => onSelect(chat.id)}
+                    title={chat.title}
+                  >
+                    <MessageSquare size={15} />
+                    <span>{chat.title}</span>
+                  </button>
+                  <button
+                    className="delete-chat"
+                    aria-label={`Delete conversation: ${chat.title}`}
+                    disabled={busy}
+                    onClick={() => onDelete(chat.id)}
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="sidebar-bottom">
+          <div className="sidebar-note">
+            <Compass size={22} />
+            <p>
+              A little guidance.
+              <br />
+              <strong>A way forward.</strong>
+            </p>
+          </div>
+          <button className="help-link" onClick={onHelp}>
+            About Scout & your privacy <ArrowUpRight size={15} />
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }

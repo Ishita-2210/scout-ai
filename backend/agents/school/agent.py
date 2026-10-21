@@ -7,26 +7,21 @@ students reconnect with education.
 
 from __future__ import annotations
 
-from google.adk.agents import Agent
-
 from backend.agents.agent_builder import (
+    Agent,
     build_agent,
 )
-
 from backend.agents.school.constants import (
     AGENT_NAME,
     DESCRIPTION,
     PROMPT_FOLDER,
 )
-
-from backend.tools import (
-    search_web,
-)
-
 from backend.models.school import (
     SchoolRecommendation,
 )
-
+from backend.tools import (
+    search_web,
+)
 
 # ==========================================================
 # School Agent Factory
@@ -40,7 +35,7 @@ def create_school_agent() -> Agent:
     Returns
     -------
     Agent
-        Configured Google ADK School Agent.
+        Configured Scout School Agent.
     """
 
     return build_agent(
@@ -54,6 +49,4 @@ def create_school_agent() -> Agent:
     )
 
 
-__all__ = (
-    "create_school_agent",
-)
+__all__ = ("create_school_agent",)

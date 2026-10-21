@@ -36,6 +36,4 @@ class AgentResponse(DomainModel):
     )
 
 
-__all__ = (
-    "AgentResponse",
-)
+__all__ = ("AgentResponse",)

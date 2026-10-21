@@ -2,18 +2,17 @@
 Scout Scholarship Agent.
 """
 
-from google.adk.agents import Agent
-
-from backend.agents.agent_builder import build_agent
+from backend.agents.agent_builder import Agent, build_agent
 from backend.agents.scholarship.constants import (
     AGENT_NAME,
     DESCRIPTION,
     PROMPT_FOLDER,
 )
-from backend.tools import search_web
 from backend.models import (
     ScholarshipRecommendation,
 )
+from backend.tools import search_web
+
 
 def create_scholarship_agent() -> Agent:
     """
@@ -31,6 +30,4 @@ def create_scholarship_agent() -> Agent:
     )
 
 
-__all__ = (
-    "create_scholarship_agent",
-)
+__all__ = ("create_scholarship_agent",)

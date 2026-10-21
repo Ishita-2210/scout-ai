@@ -6,7 +6,6 @@ Provides a singleton ScoutRunner instance.
 
 from backend.execution.runner import ScoutRunner
 
-
 _runner: ScoutRunner | None = None
 
 

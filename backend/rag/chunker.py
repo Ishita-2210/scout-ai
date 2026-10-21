@@ -48,7 +48,8 @@ class SemanticChunker:
         chunk_size: int = DEFAULT_CHUNK_SIZE,
         overlap: int = DEFAULT_OVERLAP,
     ) -> None:
-
+        if chunk_size <= 0 or not 0 <= overlap < chunk_size:
+            raise ValueError("Chunk size must be positive and overlap must be smaller than chunk size.")
         self.chunk_size = chunk_size
         self.overlap = overlap
 
@@ -73,7 +74,6 @@ class SemanticChunker:
         index = 0
 
         for section in sections:
-
             chunks.extend(
                 self._chunk_section(
                     document=document,
@@ -103,7 +103,6 @@ class SemanticChunker:
         chunks: list[DocumentChunk] = []
 
         for document in documents:
-
             chunks.extend(
                 self.chunk_document(
                     document,
@@ -111,6 +110,7 @@ class SemanticChunker:
             )
 
         return chunks
+
     # ------------------------------------------------------
     # Section Splitting
     # ------------------------------------------------------
@@ -153,7 +153,6 @@ class SemanticChunker:
         """
 
         if len(section) <= self.chunk_size:
-
             return [
                 self._create_chunk(
                     document=document,
@@ -168,30 +167,24 @@ class SemanticChunker:
         index = start_index
 
         while start < len(section):
-
             end = min(
                 start + self.chunk_size,
                 len(section),
             )
 
             if end < len(section):
-
                 boundary = section.rfind(
                     " ",
                     start,
                     end,
                 )
 
-                if (
-                    boundary != -1
-                    and boundary - start >= MIN_CHUNK_SIZE
-                ):
+                if boundary != -1 and boundary - start >= MIN_CHUNK_SIZE:
                     end = boundary
 
             chunk_text = section[start:end].strip()
 
             if chunk_text:
-
                 chunks.append(
                     self._create_chunk(
                         document=document,
@@ -205,10 +198,7 @@ class SemanticChunker:
             if end >= len(section):
                 break
 
-            start = max(
-                end - self.overlap,
-                0,
-            )
+            start = max(end - self.overlap, start + 1)
 
         return chunks
 

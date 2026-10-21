@@ -31,3 +31,18 @@ venv/
 # ==========================
 .DS_Store
 Thumbs.db
+# Private runtime state and build artifacts
+.env.*
+!.env.example
+.venv*/
+node_modules/
+frontend/dist/
+*.tsbuildinfo
+.pytest_cache/
+.ruff_cache/
+*.db
+*.db-*
+backend/data/
+frontend/test-results/
+frontend/playwright-report/
+artifacts/

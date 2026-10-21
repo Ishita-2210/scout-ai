@@ -6,9 +6,7 @@ students understand educational rights, government
 policies, and official legal procedures.
 """
 
-from google.adk.agents import Agent
-
-from backend.agents.agent_builder import build_agent
+from backend.agents.agent_builder import Agent, build_agent
 from backend.agents.legal.constants import (
     AGENT_NAME,
     DESCRIPTION,
@@ -19,10 +17,10 @@ from backend.models import (
 )
 from backend.tools import search_web
 
-
 # ==========================================================
 # Legal Agent Factory
 # ==========================================================
+
 
 def create_legal_agent() -> Agent:
     """
@@ -31,7 +29,7 @@ def create_legal_agent() -> Agent:
     Returns
     -------
     Agent
-        Configured Google ADK Legal Agent.
+        Configured Scout Legal Agent.
     """
 
     return build_agent(
@@ -45,6 +43,4 @@ def create_legal_agent() -> Agent:
     )
 
 
-__all__ = (
-    "create_legal_agent",
-)
+__all__ = ("create_legal_agent",)

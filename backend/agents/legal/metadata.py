@@ -6,12 +6,10 @@ from typing import Final
 
 from backend.agents.metadata import AgentMetadata
 
-
 METADATA: Final = AgentMetadata(
     name="legal_agent",
     description=(
-        "Helps displaced students understand educational "
-        "rights, policies, and government procedures."
+        "Helps displaced students understand educational rights, policies, and government procedures."
     ),
     responsibilities=(
         "right to education",
@@ -28,6 +26,4 @@ METADATA: Final = AgentMetadata(
 )
 
 
-__all__ = (
-    "METADATA",
-)
+__all__ = ("METADATA",)

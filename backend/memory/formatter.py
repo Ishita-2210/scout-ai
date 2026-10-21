@@ -9,15 +9,11 @@ from typing import Final
 
 from backend.memory.models import UserProfile
 
-
 # ==========================================================
 # Constants
 # ==========================================================
 
-EMPTY_CONTEXT: Final = (
-    "No known information is currently stored "
-    "about the user."
-)
+EMPTY_CONTEXT: Final = "No known information is currently stored about the user."
 
 FIELD_LABELS: Final[dict[str, str]] = {
     "name": "Name",
@@ -33,6 +29,7 @@ FIELD_LABELS: Final[dict[str, str]] = {
 # ==========================================================
 # Memory Formatter
 # ==========================================================
+
 
 class MemoryFormatter:
     """
@@ -68,20 +65,14 @@ class MemoryFormatter:
         lines = []
 
         for field, value in profile_data.items():
-
             label = FIELD_LABELS.get(
                 field,
                 field.replace("_", " ").title(),
             )
 
-            lines.append(
-                f"- {label}: {value}"
-            )
+            lines.append(f"- {label}: {value}")
 
-        return (
-            "Known information about the user:\n\n"
-            + "\n".join(lines)
-        )
+        return "Known information about the user:\n\n" + "\n".join(lines)
 
 
 # ==========================================================

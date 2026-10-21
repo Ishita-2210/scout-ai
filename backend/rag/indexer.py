@@ -20,25 +20,20 @@ logger = logging.getLogger(__name__)
 # Knowledge Directory
 # ==========================================================
 
-KNOWLEDGE_DIRECTORY = (
-    Path(__file__)
-    .parent.parent
-    / "knowledge"
-)
+KNOWLEDGE_DIRECTORY = Path(__file__).parent.parent / "knowledge"
 
 
 # ==========================================================
 # Index Knowledge Base
 # ==========================================================
 
+
 def build_knowledge_base() -> None:
     """
     Build the Scout knowledge base.
     """
 
-    logger.info(
-        "Indexing Scout knowledge base..."
-    )
+    logger.info("Indexing Scout knowledge base...")
 
     indexed = rag_service.index_directory(
         KNOWLEDGE_DIRECTORY,
@@ -64,5 +59,4 @@ def build_knowledge_base() -> None:
 # ==========================================================
 
 if __name__ == "__main__":
-
     build_knowledge_base()

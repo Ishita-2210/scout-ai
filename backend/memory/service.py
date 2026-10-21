@@ -5,7 +5,6 @@ Provides the public interface for Scout's
 memory subsystem.
 """
 
-from backend.memory.extractor import memory_extractor
 from backend.memory.formatter import memory_formatter
 from backend.memory.models import (
     MemoryUpdate,
@@ -116,29 +115,6 @@ class MemoryService:
 
         return memory_formatter.format_context(
             profile,
-        )
-
-    # ======================================================
-    # Memory Extraction
-    # ======================================================
-
-    def update_from_message(
-        self,
-        user_id: str,
-        message: str,
-    ) -> UserProfile:
-        """
-        Extract structured memory from a
-        user message and persist it.
-        """
-
-        update = memory_extractor.extract(
-            message,
-        )
-
-        return self.merge(
-            user_id,
-            update,
         )
 
 

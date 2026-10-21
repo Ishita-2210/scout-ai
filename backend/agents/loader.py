@@ -8,7 +8,6 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Final
 
-
 # ==========================================================
 # Constants
 # ==========================================================
@@ -21,6 +20,7 @@ PROMPTS_DIR: Final = BACKEND_DIR / "prompts"
 # ==========================================================
 # Prompt Loader
 # ==========================================================
+
 
 @lru_cache(maxsize=None)
 def load_prompt(
@@ -55,19 +55,13 @@ def load_prompt(
     prompt_path = PROMPTS_DIR / agent_name / filename
 
     if not prompt_path.exists():
-
-        raise FileNotFoundError(
-            f"Prompt file not found: {prompt_path}"
-        )
+        raise FileNotFoundError(f"Prompt file not found: {prompt_path}")
 
     prompt = prompt_path.read_text(
         encoding="utf-8",
     ).strip()
 
     if not prompt:
-
-        raise ValueError(
-            f"Prompt file is empty: {prompt_path}"
-        )
+        raise ValueError(f"Prompt file is empty: {prompt_path}")
 
     return prompt

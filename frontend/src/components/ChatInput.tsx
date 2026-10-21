@@ -1,77 +1,83 @@
-import { SendHorizontal } from "lucide-react";
-
-type ChatInputProps = {
-  value: string;
-  onChange: (value: string) => void;
-  onSend: () => void;
-  loading: boolean;
-};
-
-export default function ChatInput({
-  value,
-  onChange,
-  onSend,
-  loading,
-}: ChatInputProps) {
+import { ArrowUp, Square } from "lucide-react";
+import { forwardRef } from "react";
+const ChatInput = forwardRef<
+  HTMLTextAreaElement,
+  {
+    value: string;
+    onChange: (value: string) => void;
+    onSend: () => void;
+    onStop: () => void;
+    loading: boolean;
+    disabled: boolean;
+  }
+>(function ChatInput(
+  { value, onChange, onSend, onStop, loading, disabled },
+  ref,
+) {
   return (
-    <div className="border-t border-slate-200 bg-white px-8 py-6">
-
-      <div className="mx-auto flex max-w-5xl items-center gap-4">
-
-        <input
+    <div className="composer-wrap">
+      <form
+        className="composer"
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSend();
+        }}
+      >
+        <label htmlFor="message" className="sr-only">
+          Your message to Scout
+        </label>
+        <textarea
+          ref={ref}
+          id="message"
           value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !loading) {
-              onSend();
+          onChange={(event) => onChange(event.target.value)}
+          maxLength={4000}
+          rows={2}
+          disabled={disabled || loading}
+          placeholder="Tell Scout what you need help with…"
+          onKeyDown={(event) => {
+            if (
+              event.key === "Enter" &&
+              !event.shiftKey &&
+              !event.nativeEvent.isComposing
+            ) {
+              event.preventDefault();
+              if (!loading) onSend();
             }
           }}
-          placeholder="Ask Scout anything..."
-          className="
-            flex-1
-            rounded-2xl
-            border
-            border-slate-300
-            bg-white
-            px-6
-            py-4
-            text-slate-700
-            outline-none
-            transition
-            focus:border-blue-600
-            focus:ring-4
-            focus:ring-blue-100
-          "
         />
-
-        <button
-          onClick={onSend}
-          disabled={loading}
-          className="
-            flex
-            h-14
-            w-14
-            items-center
-            justify-center
-            rounded-2xl
-            bg-blue-600
-            text-white
-            shadow-md
-            transition
-            hover:bg-blue-700
-            disabled:cursor-not-allowed
-            disabled:opacity-50
-          "
-        >
+        <div className="composer-bottom">
+          <span>
+            {value.length > 3500
+              ? `${value.length.toLocaleString()} / 4,000`
+              : "Your location and grade can help Scout guide you."}
+          </span>
           {loading ? (
-            <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+            <button
+              className="send-button stop-button"
+              type="button"
+              aria-label="Stop request"
+              onClick={onStop}
+            >
+              <Square size={15} />
+            </button>
           ) : (
-            <SendHorizontal size={22} />
+            <button
+              className="send-button"
+              type="submit"
+              aria-label="Send message"
+              disabled={disabled || !value.trim()}
+            >
+              <ArrowUp size={20} />
+            </button>
           )}
-        </button>
-
-      </div>
-
+        </div>
+      </form>
+      <p className="composer-disclaimer">
+        Scout can make mistakes. Confirm important details with official
+        sources. <span>Enter to send · Shift + Enter for a new line</span>
+      </p>
     </div>
   );
-}
+});
+export default ChatInput;

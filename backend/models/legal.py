@@ -9,10 +9,10 @@ from pydantic import Field
 
 from backend.models.common import DomainModel
 
-
 # ==========================================================
 # Legal Resource
 # ==========================================================
+
 
 class LegalResource(DomainModel):
     """
@@ -57,6 +57,7 @@ class LegalResource(DomainModel):
 # ==========================================================
 # Legal Recommendation
 # ==========================================================
+
 
 class LegalRecommendation(DomainModel):
     """

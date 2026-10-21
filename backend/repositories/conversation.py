@@ -70,8 +70,7 @@ class ConversationRepository:
         session.flush()
 
         logger.info(
-            "Created user '%s'.",
-            external_id,
+            "Created user.",
         )
 
         return user
@@ -145,8 +144,7 @@ class ConversationRepository:
         session.flush()
 
         logger.info(
-            "Created conversation '%s'.",
-            session_id,
+            "Created conversation.",
         )
 
         return conversation
@@ -255,8 +253,7 @@ class ConversationRepository:
         )
 
         logger.info(
-            "Deleted conversation '%s'.",
-            conversation.session_id,
+            "Deleted conversation.",
         )
 
 

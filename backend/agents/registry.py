@@ -6,8 +6,7 @@ Central registry for all Scout agents.
 
 from __future__ import annotations
 
-from google.adk.agents import Agent
-
+from backend.agents.agent_builder import Agent
 
 # ==========================================================
 # Agent Registry
@@ -38,10 +37,7 @@ class AgentRegistry:
         """
 
         if name in self._agents:
-
-            raise ValueError(
-                f"Agent '{name}' is already registered."
-            )
+            raise ValueError(f"Agent '{name}' is already registered.")
 
         self._agents[name] = agent
 
@@ -54,10 +50,7 @@ class AgentRegistry:
         """
 
         if name not in self._agents:
-
-            raise KeyError(
-                f"Agent '{name}' is not registered."
-            )
+            raise KeyError(f"Agent '{name}' is not registered.")
 
         del self._agents[name]
 
@@ -85,14 +78,10 @@ class AgentRegistry:
         """
 
         try:
-
             return self._agents[name]
 
         except KeyError as exc:
-
-            raise KeyError(
-                f"Agent '{name}' is not registered."
-            ) from exc
+            raise KeyError(f"Agent '{name}' is not registered.") from exc
 
     def has(
         self,
@@ -160,12 +149,7 @@ class AgentRegistry:
         The Root Agent is excluded.
         """
 
-        return [
-            agent
-            for name, agent
-            in self._agents.items()
-            if name != root_agent_name
-        ]
+        return [agent for name, agent in self._agents.items() if name != root_agent_name]
 
     # ======================================================
     # Dunder Methods

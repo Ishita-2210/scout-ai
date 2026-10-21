@@ -6,7 +6,6 @@ from typing import Final
 
 from backend.agents.metadata import AgentMetadata
 
-
 METADATA: Final = AgentMetadata(
     name="counselling_agent",
     description=(
@@ -28,6 +27,4 @@ METADATA: Final = AgentMetadata(
 )
 
 
-__all__ = (
-    "METADATA",
-)
+__all__ = ("METADATA",)

@@ -18,6 +18,4 @@ class ResponseType(str, Enum):
     TOOL = "tool"
 
 
-__all__ = (
-    "ResponseType",
-)
+__all__ = ("ResponseType",)

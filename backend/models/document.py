@@ -9,10 +9,10 @@ from pydantic import Field
 
 from backend.models.common import DomainModel
 
-
 # ==========================================================
 # Document
 # ==========================================================
+
 
 class Document(DomainModel):
     """
@@ -68,6 +68,7 @@ class Document(DomainModel):
 # ==========================================================
 # Document Checklist
 # ==========================================================
+
 
 class DocumentChecklist(DomainModel):
     """

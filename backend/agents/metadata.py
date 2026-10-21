@@ -12,6 +12,4 @@ class AgentMetadata:
     responsibilities: tuple[str, ...]
 
 
-__all__ = (
-    "AgentMetadata",
-)
+__all__ = ("AgentMetadata",)

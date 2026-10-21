@@ -7,18 +7,15 @@ entry point for the Scout system.
 
 from __future__ import annotations
 
-from google.adk.agents import Agent
-
 from backend.agents.agent_builder import (
+    Agent,
     build_agent,
 )
-
 from backend.agents.root.constants import (
     AGENT_NAME,
     DESCRIPTION,
     PROMPT_FOLDER,
 )
-
 
 # ==========================================================
 # Root Agent Factory
@@ -57,6 +54,4 @@ def create_root_agent(
     )
 
 
-__all__ = (
-    "create_root_agent",
-)
+__all__ = ("create_root_agent",)

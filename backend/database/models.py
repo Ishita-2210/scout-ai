@@ -4,14 +4,17 @@ Scout Database Models.
 Defines the SQLAlchemy ORM models used for
 persistent storage.
 """
+
 from __future__ import annotations
-from sqlalchemy import Float
+
 from datetime import UTC, datetime
 from uuid import uuid4
+
 from sqlalchemy import (
     JSON,
     Boolean,
     DateTime,
+    Float,
     ForeignKey,
     Index,
     String,
@@ -25,7 +28,6 @@ from sqlalchemy.orm import (
 )
 
 from backend.database.base import Base
-
 
 # ==========================================================
 # Shared Mixins
@@ -91,6 +93,7 @@ class User(UUIDMixin, TimestampMixin, Base):
         cascade="all, delete-orphan",
         passive_deletes=True,
     )
+
 
 # ==========================================================
 # Conversation
@@ -198,6 +201,7 @@ class Message(UUIDMixin, TimestampMixin, Base):
         ),
     )
 
+
 # ==========================================================
 # Memory
 # ==========================================================
@@ -274,6 +278,7 @@ class Memory(UUIDMixin, TimestampMixin, Base):
         ),
     )
 
+
 __all__ = (
     "UUIDMixin",
     "TimestampMixin",
@@ -282,3 +287,15 @@ __all__ = (
     "Message",
     "Memory",
 )
+
+
+class ChatRequestRecord(UUIDMixin, TimestampMixin, Base):
+    """Durable idempotency ledger. Existing tables and records are untouched."""
+
+    __tablename__ = "chat_requests"
+    owner: Mapped[str] = mapped_column(String(100), index=True)
+    request_id: Mapped[str] = mapped_column(String(36))
+    payload_hash: Mapped[str] = mapped_column(String(64))
+    status: Mapped[str] = mapped_column(String(20), default="running")
+    result: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    __table_args__ = (UniqueConstraint("owner", "request_id", name="uq_chat_request_owner"),)

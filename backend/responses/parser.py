@@ -1,7 +1,7 @@
 """
 Scout Response Parser.
 
-Converts raw ADK outputs into normalized
+Converts provider-neutral outputs into normalized
 Scout response objects.
 """
 
@@ -29,7 +29,6 @@ class ResponseParser:
         """
 
         if isinstance(response, BaseModel):
-
             return AgentResponse(
                 response_type=ResponseType.STRUCTURED,
                 content=response.model_dump(),
@@ -37,7 +36,6 @@ class ResponseParser:
             )
 
         if isinstance(response, dict):
-
             return AgentResponse(
                 response_type=ResponseType.STRUCTURED,
                 content=response,

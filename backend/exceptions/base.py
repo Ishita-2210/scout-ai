@@ -30,10 +30,6 @@ class ScoutError(Exception):
     def __str__(self) -> str:
 
         if self.error_code:
-
-            return (
-                f"[{self.error_code}] "
-                f"{self.message}"
-            )
+            return f"[{self.error_code}] {self.message}"
 
         return self.message

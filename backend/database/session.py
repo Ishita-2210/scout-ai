@@ -9,11 +9,9 @@ from collections.abc import Generator
 
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
-from sqlalchemy.orm import Session
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 
 from backend.config import DATABASE_URL
-
 
 # ==========================================================
 # Engine
@@ -27,7 +25,6 @@ _ENGINE_OPTIONS = {
 
 # SQLite requires check_same_thread=False
 if DATABASE_URL.startswith("sqlite"):
-
     _ENGINE_OPTIONS["connect_args"] = {
         "check_same_thread": False,
     }
@@ -56,6 +53,7 @@ SessionLocal = sessionmaker(
 # Session Dependency
 # ==========================================================
 
+
 def get_session() -> Generator[Session, None, None]:
     """
     Provide a transactional database session.
@@ -78,6 +76,7 @@ def get_session() -> Generator[Session, None, None]:
 # ==========================================================
 # Utilities
 # ==========================================================
+
 
 def create_tables() -> None:
     """

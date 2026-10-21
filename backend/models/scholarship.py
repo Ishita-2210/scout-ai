@@ -9,10 +9,10 @@ from pydantic import Field
 
 from backend.models.common import DomainModel
 
-
 # ==========================================================
 # Scholarship
 # ==========================================================
+
 
 class Scholarship(DomainModel):
     """
@@ -56,6 +56,7 @@ class Scholarship(DomainModel):
 # ==========================================================
 # Scholarship Recommendation
 # ==========================================================
+
 
 class ScholarshipRecommendation(DomainModel):
     """

@@ -22,6 +22,4 @@ class CounsellingResponse(DomainModel):
     )
 
 
-__all__ = (
-    "CounsellingResponse",
-)
+__all__ = ("CounsellingResponse",)

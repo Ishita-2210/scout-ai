@@ -19,10 +19,7 @@ class AgentMetadata:
 
 METADATA: Final = AgentMetadata(
     name="root_agent",
-    description=(
-        "Coordinates specialist agents and manages "
-        "conversation orchestration."
-    ),
+    description=("Coordinates specialist agents and manages conversation orchestration."),
     responsibilities=(
         "orchestration",
         "routing",

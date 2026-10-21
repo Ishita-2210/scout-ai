@@ -6,22 +6,18 @@ students through educational wellbeing, motivation,
 study planning, and school re-engagement.
 """
 
-from google.adk.agents import Agent
-
-from backend.agents.agent_builder import build_agent
-
+from backend.agents.agent_builder import Agent, build_agent
 from backend.agents.counselling.constants import (
     AGENT_NAME,
     DESCRIPTION,
     PROMPT_FOLDER,
 )
-
 from backend.models import CounsellingResponse
-
 
 # ==========================================================
 # Counselling Agent Factory
 # ==========================================================
+
 
 def create_counselling_agent() -> Agent:
     """
@@ -30,7 +26,7 @@ def create_counselling_agent() -> Agent:
     Returns
     -------
     Agent
-        Configured Google ADK Counselling Agent.
+        Configured Scout Counselling Agent.
     """
 
     return build_agent(
@@ -41,6 +37,4 @@ def create_counselling_agent() -> Agent:
     )
 
 
-__all__ = (
-    "create_counselling_agent",
-)
+__all__ = ("create_counselling_agent",)

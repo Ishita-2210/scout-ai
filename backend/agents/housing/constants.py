@@ -4,7 +4,6 @@ Constants for the Scout Housing Agent.
 
 from typing import Final
 
-
 # ==========================================================
 # Agent Identity
 # ==========================================================

@@ -9,10 +9,10 @@ from pydantic import Field
 
 from backend.models.common import DomainModel
 
-
 # ==========================================================
 # Housing
 # ==========================================================
+
 
 class Housing(DomainModel):
     """
@@ -66,6 +66,7 @@ class Housing(DomainModel):
 # ==========================================================
 # Housing Recommendation
 # ==========================================================
+
 
 class HousingRecommendation(DomainModel):
     """
