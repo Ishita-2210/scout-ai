@@ -4,6 +4,10 @@ Scout helps displaced students and families continue their education. It provide
 
 The application uses React 19, TypeScript, Vite and Tailwind on the frontend; FastAPI, SQLAlchemy and SQLite on the backend. All LLM calls run server-side through the official Groq Python SDK. The original six specialist prompts and domain schemas are retained.
 
+## Project context
+
+The resumes describe **Scout AI — Multi-Agent AI Assistant (June–July 2026)** as a five-agent Google ADK/Gemini project. That historical design differs from this maintained application: the current request path uses Groq, a root router and six specialist domains. Bundled PDF retrieval uses lexical text matching; retained Chroma/Google embedding utilities are separate experiments, not the live retrieval path. The source and checks below document the current implementation rather than reproduce the historical provider design.
+
 ## Request flow
 
 ```text
